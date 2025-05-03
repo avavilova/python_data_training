@@ -3,7 +3,7 @@ import random
 
 def create_random_numbers_list(n: int, x: int, y: int) -> list:
     """Function to create list of n random numbers from x to y"""
-    return [random.randrange(x, y+1) for i in range(n)]
+    return random.sample(range(x, y+1), n)
 
 
 def sort_list(l1: list) -> list:
