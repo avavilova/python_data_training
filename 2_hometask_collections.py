@@ -27,16 +27,21 @@ def create_list_of_random_dicts(x: int, y:int) -> list:
 
 def create_dict(l1: list) -> dict:
     result_dict = {}
+    dict_number = {}
+    dict_keys = []
     for i in range(len(l1)):
         for key in l1[i].keys():
-            if key in result_dict:
+            if key in dict_keys:
                 if l1[i][key] >= result_dict[key]:
                     result_dict.pop(key)
-                    result_dict.update({f'{key}_{i}': l1[i][key]})
+                    result_dict.update({f'{key}_{i+1}': l1[i][key]})
                 else:
-                    result_dict.update({key: l1[i][key]})
+                    result_dict.pop(key)
+                    result_dict.update({f'{key}_{dict_number[key]+1}': l1[i][key]})
             else:
-                result_dict.update({key: l1[i][key]})
+                result_dict[key] = l1[i][key]
+                dict_number[key] = i
+                dict_keys.append(key)
     return result_dict
 
 
