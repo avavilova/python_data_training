@@ -17,34 +17,37 @@ import random
 import string
 
 
-def create_list_of_random_dicts(x: int, y:int) -> list:
+def create_list_of_random_dicts(x: int, y: int) -> list:
+    """To create a list of random number of dicts (from x to y)"""
     n = random.randint(x, y+1)
-    l = []
+    random_list = []
     for _ in range(n):
         z = random.randint(x, y + 1)
-        l.append({random.choice(string.ascii_lowercase): random.randint(0, 101) for _ in range(z)})
-    return l
+        random_list.append({random.choice(string.ascii_lowercase): random.randint(0, 101) for _ in range(z)})
+    return random_list
 
-def create_dict(l1: list) -> dict:
+
+def create_dict(initial_list: list) -> dict:
+    """To get previously generated list of dicts and create one common dict:
+        if dicts have same key, we will take max value, and rename key with dict number with max value
+        # if key is only in one dict - take it as is"""
     result_dict = {}
-    dict_number = {}
-    dict_keys = []
-    for i in range(len(l1)):
-        for key in l1[i].keys():
-            if key in dict_keys:
-                if l1[i][key] >= result_dict[key]:
-                    result_dict.pop(key)
-                    result_dict.update({f'{key}_{i+1}': l1[i][key]})
-                else:
-                    result_dict.pop(key)
-                    result_dict.update({f'{key}_{dict_number[key]+1}': l1[i][key]})
-            else:
-                result_dict[key] = l1[i][key]
-                dict_number[key] = i
-                dict_keys.append(key)
+    max_values_dict = {}
+    for i in range(len(initial_list)):
+        for key, value in initial_list[i].items():
+            if key not in max_values_dict:
+                max_values_dict[key] = (i, value)
+            elif value > max_values_dict[key][1]:
+                max_values_dict[key] = (i, value)
+
+    for k, (ind, v) in max_values_dict.items():
+        count = sum(1 for d in initial_list if k in d)
+        if count > 1:
+            final_key = f"{k}_{ind}"
+        else:
+            final_key = k
+        result_dict[final_key] = v
     return result_dict
-
-
 
 
 if __name__ == "__main__":
